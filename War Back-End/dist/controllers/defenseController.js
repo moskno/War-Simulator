@@ -8,18 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.launchMissile = void 0;
-const Missile_1 = __importDefault(require("../models/Missile"));
-const launchMissile = (missileName, targetRegion) => __awaiter(void 0, void 0, void 0, function* () {
-    const missile = yield Missile_1.default.findOne({ name: missileName });
-    if (!missile) {
-        throw new Error(`Missile type not found`);
+exports.intercept = void 0;
+const defenseService_1 = require("../services/defenseService");
+const intercept = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { organizationName, missileType } = req.body;
+    try {
+        const result = yield (0, defenseService_1.interceptMissile)(organizationName, missileType);
+        res.json(result);
     }
-    const impactStatus = Math.random() > 0.5 ? "hit" : "missed";
-    return { success: true, missileName, targetRegion, impactStatus };
+    catch (error) {
+        res.status(400).json({ message: error.message });
+    }
 });
-exports.launchMissile = launchMissile;
+exports.intercept = intercept;

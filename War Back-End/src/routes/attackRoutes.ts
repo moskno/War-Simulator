@@ -1,8 +1,8 @@
 import express from 'express';
-import {attacks} from '../controllers/attackController'
+import { launch } from '../controllers/attackController'
 
 const router = express.Router();
 
-router.get('/attacks', attacks)
+router.post('/launch', launch)
 
 export default router;

@@ -12,14 +12,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.launchMissile = void 0;
-const Missile_1 = __importDefault(require("../models/Missile"));
-const launchMissile = (missileName, targetRegion) => __awaiter(void 0, void 0, void 0, function* () {
-    const missile = yield Missile_1.default.findOne({ name: missileName });
-    if (!missile) {
-        throw new Error(`Missile type not found`);
+exports.interceptMissile = void 0;
+const Organization_1 = __importDefault(require("../models/Organization"));
+const interceptMissile = (organizationName, missileType) => __awaiter(void 0, void 0, void 0, function* () {
+    const organization = yield Organization_1.default.findOne({ name: organizationName });
+    if (!organization) {
+        throw new Error("Organization not found");
     }
-    const impactStatus = Math.random() > 0.5 ? "hit" : "missed";
-    return { success: true, missileName, targetRegion, impactStatus };
+    const defenceResource = organization.resources.find((r) => r.name === missileType);
+    if (!defenceResource || defenceResource.amount <= 0) {
+        throw new Error("No available defenses for this missile");
+    }
+    defenceResource.amount -= 1;
+    yield organization.save();
+    return {
+        success: true,
+        message: `Missile intercepted seccessfully by ${missileType}`,
+    };
 });
-exports.launchMissile = launchMissile;
+exports.interceptMissile = interceptMissile;

@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const attackController_1 = require("../controllers/attackController");
+const defenseController_1 = require("../controllers/defenseController");
 const router = express_1.default.Router();
-router.get('/launch', attackController_1.launch);
+router.post('/intercept', defenseController_1.intercept);
 exports.default = router;

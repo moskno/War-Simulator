@@ -1,5 +1,12 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
+import { launchMissile } from "../services/attackService";
 
-export const attacks = (req: Request, res: Response) => {
-  res.json({ message: 'Attacks route is working!' });
+export const launch = async (req: Request, res: Response) => {
+  const { missileName, targetRegion } = req.body;
+  try {
+    const result = await launchMissile(missileName, targetRegion);
+    res.json(result);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
 };
