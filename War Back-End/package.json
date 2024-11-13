@@ -1,14 +1,14 @@
-{
-  "name": "war-back-end",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc",
-    "start": "node dist/server.js",
-    "dev": "tsc && nodemon src/server.ts",
-    "seed": "ts-node src/data/seedData.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  {
+    "name": "war-back-end",
+    "version": "1.0.0",
+    "main": "app.js",
+    "scripts": {
+      "build": "tsc",
+      "start": "node dist/server.js",
+      "dev": "tsc && nodemon src/server.ts",
+      "seed": "ts-node src/data/seedData.ts",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
   "keywords": [],
   "author": "",
   "license": "ISC",
