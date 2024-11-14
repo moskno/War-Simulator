@@ -1,5 +1,5 @@
 import Organization from "../models/Organization";
-import Missile from "models/Missile";
+import Missile from "../models/Missile";
 import { sendNotification } from "../utils/websocket";
 
 export const interceptMissile = async (

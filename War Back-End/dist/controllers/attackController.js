@@ -12,9 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.launch = void 0;
 const attackService_1 = require("../services/attackService");
 const launch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { missileName, targetRegion } = req.body;
+    const { missileName, targetRegion, organizationName } = req.body;
     try {
-        const result = yield (0, attackService_1.launchMissile)(missileName, targetRegion);
+        const result = yield (0, attackService_1.launchMissile)(missileName, targetRegion, organizationName);
         res.json(result);
     }
     catch (error) {

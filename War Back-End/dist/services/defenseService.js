@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.interceptMissile = void 0;
 const Organization_1 = __importDefault(require("../models/Organization"));
+const Missile_1 = __importDefault(require("../models/Missile"));
 const websocket_1 = require("../utils/websocket");
 const interceptMissile = (organizationName, missileType) => __awaiter(void 0, void 0, void 0, function* () {
     const organization = yield Organization_1.default.findOne({ name: organizationName });
@@ -24,9 +25,25 @@ const interceptMissile = (organizationName, missileType) => __awaiter(void 0, vo
     if (!defenceResource || defenceResource.amount <= 0) {
         throw new Error("No available defenses for this missile");
     }
-    (0, websocket_1.sendNotification)(`Missile intercepted successfully by ${missileType} for ${organizationName}`);
+    const interceptor = yield Missile_1.default.findOne({ name: missileType });
+    if (!interceptor) {
+        throw new Error("Interceptor not found");
+    }
+    const missile = yield Missile_1.default.findOne({ name: missileType });
+    if (!missile) {
+        throw new Error("Missile not found");
+    }
+    if (!missile.intercepts.includes(missileType)) {
+        throw new Error(`Interception failed: ${missileType} cannot be intercepted by ${defenceResource.name}.`);
+    }
+    const interceptionTime = 1 / interceptor.speed;
+    const missileTimeToTarget = 1 / missile.speed;
+    if (interceptionTime > missileTimeToTarget) {
+        throw new Error(`Interception failed: ${missileType} is too fast.`);
+    }
     defenceResource.amount -= 1;
     yield organization.save();
+    (0, websocket_1.sendNotification)(`Missile intercepted successfully by ${missileType} for ${organizationName}`);
     return {
         success: true,
         message: `Missile intercepted successfully by ${missileType}`,

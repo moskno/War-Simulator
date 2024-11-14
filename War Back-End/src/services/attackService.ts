@@ -1,5 +1,5 @@
 import Missile from "../models/Missile";
-import Organization from "models/Organization";
+import Organization from "../models/Organization";
 import { sendNotification } from "../utils/websocket";
 
 export const launchMissile = async (

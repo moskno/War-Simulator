@@ -14,15 +14,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.launchMissile = void 0;
 const Missile_1 = __importDefault(require("../models/Missile"));
+const Organization_1 = __importDefault(require("../models/Organization"));
 const websocket_1 = require("../utils/websocket");
-const launchMissile = (missileName, targetRegion) => __awaiter(void 0, void 0, void 0, function* () {
+const launchMissile = (missileName, targetRegion, organizationName) => __awaiter(void 0, void 0, void 0, function* () {
     const missile = yield Missile_1.default.findOne({ name: missileName });
+    const organization = yield Organization_1.default.findOne({ name: organizationName });
     if (!missile) {
         throw new Error(`Missile type not found`);
     }
-    const result = yield (0, exports.launchMissile)(missileName, targetRegion);
-    (0, websocket_1.sendNotification)(`Missile ${missileName} launched towards ${targetRegion}. Status: ${result.impactStatus}`);
+    if (!organization) {
+        throw new Error(`Organization not found`);
+    }
+    const allowedRegions = organization.resources.map((resource) => resource.name);
+    if (!allowedRegions.includes(targetRegion)) {
+        throw new Error(`Organization ${organizationName} is not allowed to attack ${targetRegion}`);
+    }
     const impactStatus = Math.random() > 0.5 ? "hit" : "missed";
+    (0, websocket_1.sendNotification)(`Missile ${missileName} launched towards ${targetRegion}. Status: ${impactStatus}`);
     return { success: true, missileName, targetRegion, impactStatus };
 });
 exports.launchMissile = launchMissile;
