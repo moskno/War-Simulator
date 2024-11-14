@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.interceptMissile = void 0;
 const Organization_1 = __importDefault(require("../models/Organization"));
+const websocket_1 = require("../utils/websocket");
 const interceptMissile = (organizationName, missileType) => __awaiter(void 0, void 0, void 0, function* () {
     const organization = yield Organization_1.default.findOne({ name: organizationName });
     if (!organization) {
@@ -23,11 +24,12 @@ const interceptMissile = (organizationName, missileType) => __awaiter(void 0, vo
     if (!defenceResource || defenceResource.amount <= 0) {
         throw new Error("No available defenses for this missile");
     }
+    (0, websocket_1.sendNotification)(`Missile intercepted successfully by ${missileType} for ${organizationName}`);
     defenceResource.amount -= 1;
     yield organization.save();
     return {
         success: true,
-        message: `Missile intercepted seccessfully by ${missileType}`,
+        message: `Missile intercepted successfully by ${missileType}`,
     };
 });
 exports.interceptMissile = interceptMissile;
