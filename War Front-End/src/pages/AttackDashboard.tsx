@@ -15,7 +15,7 @@ const AttackDashboard: React.FC = () => {
   useEffect(() => {
     const fetchMissiles = async () => {
       try {
-        const response = await api.get("/attack/missiles");
+        const response = await api.get("api/attack/missiles");
         setMissiles(response.data);
       } catch (error) {
         console.error("Error fetching missiles:", error);
@@ -36,7 +36,7 @@ const AttackDashboard: React.FC = () => {
 
   const handleLaunch = async (missileName: string) => {
     try {
-      const response = await api.post("/attack/launch", {
+      const response = await api.post("api/attack/launch", {
         missileName,
         targetRegion,
       });

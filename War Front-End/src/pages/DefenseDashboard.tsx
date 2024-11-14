@@ -15,7 +15,7 @@ const DefenseDashboard: React.FC = () => {
   useEffect(() => {
     const fetchDefenseSystems = async () => {
       try {
-        const response = await api.get("/defense/systems");
+        const response = await api.get("api/defense/systems");
         setDefenseSystems(response.data);
       } catch (error) {
         console.error("Error fetching defense systems:", error);
@@ -35,7 +35,7 @@ const DefenseDashboard: React.FC = () => {
 
   const handleIntercept = async (systemName: string) => {
     try {
-      const response = await api.post("/defense/intercept", { systemName });
+      const response = await api.post("api/defense/intercept", { systemName });
       setNotifications((prev) => [...prev, response.data.message]);
     } catch (error) {
       console.error("Interception failed:", error);
