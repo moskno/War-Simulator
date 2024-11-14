@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-// import axios from "axios";
 import api from "../api/api";
 import { AuthContext } from "../context/AuthContext";
 
@@ -7,17 +6,26 @@ const Home: React.FC = () => {
   const authContext = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-//   const [organization, setOrganization] = useState("IDF - North");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const loginHandler = async () => {
+    setErrorMessage(null);
+    setSuccessMessage(null);
     try {
       const response = await api.post("/api/auth/login", {
         username,
         password,
       });
       authContext?.login(username, response.data.token);
-    } catch (error) {
-      console.error(error);
+      setSuccessMessage("Login successful");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        setErrorMessage("Incorrect username or password");
+      } else {
+        setErrorMessage("An error occurred. Please try again.");
+      }
     }
   };
 
@@ -37,6 +45,9 @@ const Home: React.FC = () => {
         placeholder="Password"
       ></input>
       <button onClick={loginHandler}>Login</button>
+
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
     </div>
   );
 };
