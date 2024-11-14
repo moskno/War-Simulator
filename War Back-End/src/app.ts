@@ -5,7 +5,6 @@ import connectDB from "./config/database";
 import authRoutes from "./routes/authRoutes";
 import attackRoutes from "./routes/attackRoutes";
 import defenseRoutes from "./routes/defenseRoutes";
-import { METHODS } from "http";
 
 dotenv.config();
 connectDB();

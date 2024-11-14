@@ -4,7 +4,13 @@ import http from "http";
 let io: SocketIOServer;
 
 export const initializeWebSocket = (server: http.Server) => {
-  io = new SocketIOServer(server);
+  io = new SocketIOServer(server, {
+    cors: {
+        origin: "http://localhost:5173",
+        methods: ["GET", "POST"],
+        credentials: true,
+    }
+  });
 
   io.on("connection", (socket) => {
     console.log("New WebSocket connection established");
