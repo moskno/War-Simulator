@@ -8,9 +8,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.launch = void 0;
+exports.launch = exports.getMissiles = void 0;
 const attackService_1 = require("../services/attackService");
+const Missile_1 = __importDefault(require("../models/Missile"));
+const getMissiles = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const missiles = yield Missile_1.default.find();
+        res.json(missiles);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to fetch missiles" });
+    }
+});
+exports.getMissiles = getMissiles;
 const launch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { missileName, targetRegion, organizationName } = req.body;
     try {

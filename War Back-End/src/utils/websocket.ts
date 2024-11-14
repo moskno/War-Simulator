@@ -1,29 +1,26 @@
-import WebSocket from "ws";
+import { Server as SocketIOServer } from "socket.io";
+import http from "http";
 
-let wss: WebSocket.Server | null = null;
+let io: SocketIOServer;
 
-export const initializeWebSocket = (server: any) => {
-  wss = new WebSocket.Server({ server });
+export const initializeWebSocket = (server: http.Server) => {
+  io = new SocketIOServer(server);
 
-  wss.on("connection", (ws: WebSocket) => {
+  io.on("connection", (socket) => {
     console.log("New WebSocket connection established");
 
-    ws.on("message", (message) => {
-      console.log("Received:", message.toString());
+    socket.on("message", (message: string) => {
+      console.log("Received:", message);
     });
 
-    ws.on("close", () => {
+    socket.on("disconnect", () => {
       console.log("WebSocket connection closed");
     });
   });
 };
 
 export const sendNotification = (message: string) => {
-  if (wss) {
-    wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(message);
-      }
-    });
+  if (io) {
+    io.emit("message", message);
   }
 };

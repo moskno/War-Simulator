@@ -8,4 +8,5 @@ const attackController_1 = require("../controllers/attackController");
 const authMiddleware_1 = __importDefault(require("../middlewares/authMiddleware"));
 const router = express_1.default.Router();
 router.post('/launch', authMiddleware_1.default, attackController_1.launch);
+router.get('/missiles', authMiddleware_1.default, attackController_1.getMissiles);
 exports.default = router;

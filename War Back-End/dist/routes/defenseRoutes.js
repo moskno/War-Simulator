@@ -8,4 +8,5 @@ const defenseController_1 = require("../controllers/defenseController");
 const authMiddleware_1 = __importDefault(require("../middlewares/authMiddleware"));
 const router = express_1.default.Router();
 router.post('/intercept', authMiddleware_1.default, defenseController_1.intercept);
+router.get('/systems', authMiddleware_1.default, defenseController_1.getDefenseSystems);
 exports.default = router;
